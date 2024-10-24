@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Home from './pages/Home';
-import Search from './pages/Search';
 import Explore from './pages/Explore';
 import Messages from './pages/Messages';
 import Notifications from './pages/Notifications';
@@ -10,6 +9,7 @@ import Create from './pages/Create';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import More from './pages/More';
+import SearchPanel from './pages/Search';
 
 const App = () => {
   return (
@@ -31,7 +31,7 @@ const Main = () => {
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/search" element={<Search />} />
+          <Route path="/search" element={<SearchPanel/>} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/notifications" element={<Notifications />} />

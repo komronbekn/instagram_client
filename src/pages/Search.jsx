@@ -1,11 +1,21 @@
-// SearchPanel.jsx
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom"; // Импортируем хук
 import axios from "axios";
 
 const SearchPanel = ({ isOpen, onClose }) => {
   const [query, setQuery] = useState(""); // Запрос пользователя
   const [accounts, setAccounts] = useState([]); // Результаты поиска
   const [recentQueries, setRecentQueries] = useState([]); // Недавние запросы
+  const [errorMessage, setErrorMessage] = useState(""); // Ошибка, если аккаунт не найден
+
+  const location = useLocation(); // Получаем текущий маршрут
+
+  // Закрытие панели при смене маршрута
+  useEffect(() => {
+    if (isOpen) {
+      onClose(); // Закрываем панель при смене страницы
+    }
+  }, [location]); // Отслеживаем изменение маршрута
 
   // Загружаем последние запросы из localStorage
   useEffect(() => {
@@ -23,20 +33,34 @@ const SearchPanel = ({ isOpen, onClose }) => {
   // Выполняем поиск
   const handleSearch = async (e) => {
     e.preventDefault();
+    setErrorMessage(""); // Сброс ошибки перед поиском
+
     if (query.trim()) {
-      const response = await axios.get(
-        `http://localhost:5001/accounts?name_like=${query}`
-      );
-      setAccounts(response.data);
-      saveQuery(query);
-      setQuery(""); // Очистка строки поиска
+      try {
+        const response = await axios.get(
+          `http://localhost:5001/accounts?name_like=${query}`
+        );
+
+        if (response.data.length > 0) {
+          setAccounts(response.data);
+        } else {
+          setAccounts([]);
+          setErrorMessage("Такого аккаунта нет.");
+        }
+
+        saveQuery(query); // Сохранение запроса
+        setQuery(""); // Очистка строки поиска
+      } catch (error) {
+        console.error("Ошибка при выполнении поиска:", error);
+        setErrorMessage("Ошибка поиска. Попробуйте позже.");
+      }
     }
   };
 
   return (
     <div
-      className={`fixed top-0 left-0 h-full rounded-[25px] w-[400px] bg-white shadow-lg transition-transform duration-300 transform 
-        ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
+      className={`fixed top-0 left-0 h-full z-10 w-[400px] bg-white shadow-lg rounded-[10px] transition-transform duration-300 transform
+        ${isOpen ? "translate-x-[257px]" : "-translate-x-full"}`}
     >
       <div className="p-4">
         {/* Кнопка закрытия */}
@@ -70,14 +94,16 @@ const SearchPanel = ({ isOpen, onClose }) => {
         {/* Результаты поиска */}
         <div className="mb-4">
           <h2 className="text-lg font-bold">Результаты:</h2>
-          {accounts.length > 0 ? (
+          {errorMessage ? (
+            <p className="text-red-500">{errorMessage}</p>
+          ) : accounts.length > 0 ? (
             accounts.map((account) => (
               <div key={account.id} className="p-2 border-b">
                 <p>{account.name} (@{account.username})</p>
               </div>
             ))
           ) : (
-            <p className="text-gray-500">Нет результатов</p>
+            <p className="text-gray-500">Введите запрос для поиска.</p>
           )}
         </div>
 
