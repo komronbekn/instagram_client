@@ -4,7 +4,6 @@ const Notifications = () => {
   const [notifications, setNotifications] = useState({ thisMonth: [], earlier: [] });
 
   useEffect(() => {
-    // Fetch data from your JSON Server
     fetch('http://localhost:5000/notification')
       .then(response => response.json())
       .then(data => setNotifications(data))
@@ -12,7 +11,6 @@ const Notifications = () => {
   }, []);
 
   const toggleSubscription = (id, type) => {
-    // Update the subscription status based on ID and type (thisMonth or earlier)
     setNotifications(prevNotifications => ({
       ...prevNotifications,
       [type]: prevNotifications[type].map(notification =>
@@ -60,7 +58,6 @@ const Notifications = () => {
 
       <div>
         <h3 className="text-lg font-semibold mb-2">В этом месяце</h3>
-        {/* No buttons for this month's notifications */}
         {notifications.thisMonth.map(notification => renderNotification(notification, 'thisMonth', false))}
       </div>
 
@@ -68,7 +65,6 @@ const Notifications = () => {
 
       <div>
         <h3 className="text-lg font-semibold mb-2">Ранее</h3>
-        {/* Buttons are shown for earlier notifications */}
         {notifications.earlier.map(notification => renderNotification(notification, 'earlier', true))}
       </div>
     </div>
