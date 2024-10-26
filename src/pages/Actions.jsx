@@ -10,7 +10,7 @@ const Actions = () => {
     // Fetch data from API when the component mounts
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/posts')
+        const response = await fetch('http://localhost:5001/posts')
         if (!response.ok) {
           throw new Error('Failed to fetch data')
         }

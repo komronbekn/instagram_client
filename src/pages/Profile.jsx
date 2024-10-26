@@ -89,18 +89,25 @@ export default function EnhancedProfile() {
     }, [])
 
     const fetchCurrentUser = async () => {
+        setIsLoading(true); // Set loading to true at the start
         try {
-            const response = await fetch(`http://192.168.80.250:5000/users/3`)
-            const user = await response.json()
-            setCurrentUser(user)
-            console.log('Current user ID:', user.id)
-            await fetchUserData(user.id)
+            const response = await fetch(`http://localhost:5001/users/1`);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const user = await response.json();
+            setCurrentUser(user);
+            console.log('Current user ID:', user.id);
+            await fetchUserData(user.id);
         } catch (error) {
-            console.error("Error fetching current user data:", error)
+            console.error("Error fetching current user data:", error);
         } finally {
-            setIsLoading(false)
+            setIsLoading(false); // Ensure loading is set to false in any outcome
         }
-    }
+    };
+
 
     const fetchUserData = async (userId) => {
         if (!userId) {
@@ -108,7 +115,7 @@ export default function EnhancedProfile() {
             return
         }
         try {
-            const response = await fetch(`http://192.168.80.250:5000/users/${userId}`)
+            const response = await fetch(`http://localhost:5001/users/${userId}`)
             const user = await response.json()
             setUserData(user)
             setIsCurrentUserProfile(userId === currentUser?.id)
@@ -122,7 +129,7 @@ export default function EnhancedProfile() {
 
     const fetchPublications = async (userEmail) => {
         try {
-            const response = await fetch("http://192.168.80.250:5000/Publications")
+            const response = await fetch("http://localhost:5001/Publications")
             const publicationsData = await response.json()
             const userPublications = publicationsData.filter(
                 (publication) => publication.author === userEmail
@@ -139,7 +146,7 @@ export default function EnhancedProfile() {
 
     const fetchCurrents = async (userEmail) => {
         try {
-            const response = await fetch("http://localhost:5000/Currents")
+            const response = await fetch("http://localhost:5001/Currents")
             const currentsData = await response.json()
             const userCurrents = currentsData.filter(
                 (current) => current.author === userEmail
@@ -179,7 +186,7 @@ export default function EnhancedProfile() {
                 ? publication.likedUsers.filter(email => email !== currentUser.email)
                 : [...publication.likedUsers, currentUser.email]
 
-            const response = await fetch(`http://localhost:5000/Publications/${publicationId}`, {
+            const response = await fetch(`http://localhost:5001/Publications/${publicationId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -223,7 +230,7 @@ export default function EnhancedProfile() {
         }
 
         try {
-            const response = await fetch(`http://localhost:5000/Publications/${publicationId}`, {
+            const response = await fetch(`http://localhost:5001/Publications/${publicationId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -273,7 +280,7 @@ export default function EnhancedProfile() {
                 com.id === commentId ? { ...com, likedUsers: updatedLikedUsers } : com
             )
 
-            const response = await fetch(`http://localhost:5000/Publications/${publicationId}`, {
+            const response = await fetch(`http://localhost:5001/Publications/${publicationId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -311,7 +318,7 @@ export default function EnhancedProfile() {
         const isFollowing = userData.followers.some(follower => follower.id === currentUser.id)
 
         try {
-            const response = await fetch(`http://localhost:5000/users/${userData.id}`, {
+            const response = await fetch(`http://localhost:5001/users/${userData.id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -341,7 +348,7 @@ export default function EnhancedProfile() {
                 setCurrentUser(updatedCurrentUser)
 
                 // Update the server with the new following list for the current user
-                await fetch(`http://localhost:5000/users/${currentUser.id}`, {
+                await fetch(`http://localhost:5001/users/${currentUser.id}`, {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json',
