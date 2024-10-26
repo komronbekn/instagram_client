@@ -11,7 +11,7 @@ import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Settings from './pages/Settings';
 import Actions from './pages/actions';
-import Saved from './pages/saved';
+import Saved from './pages/Saved';
 import Problem from './pages/Problem';
 import Switching from './pages/Switching';
 
