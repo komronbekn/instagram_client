@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom"; // Импортируем хук
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 
 const SearchPanel = ({ isOpen, onClose }) => {
@@ -38,7 +38,7 @@ const SearchPanel = ({ isOpen, onClose }) => {
     if (query.trim()) {
       try {
         const response = await axios.get(
-          `http://localhost:5001/accounts?name_like=${query}`
+          `https://insta-2-e60y.onrender.com/users?name_like=${query}`
         );
 
         if (response.data.length > 0) {
@@ -59,7 +59,7 @@ const SearchPanel = ({ isOpen, onClose }) => {
 
   return (
     <div
-      className={`fixed top-0 left-0 h-full z-10 w-[400px] bg-white shadow-lg rounded-[10px] transition-transform duration-300 transform
+      className={`fixed top-0 left-0 h-full z-50 w-[400px] bg-white shadow-lg rounded-[10px] transition-transform duration-300 transform
         ${isOpen ? "translate-x-[257px]" : "-translate-x-full"}`}
     >
       <div className="p-4">
@@ -99,7 +99,7 @@ const SearchPanel = ({ isOpen, onClose }) => {
           ) : accounts.length > 0 ? (
             accounts.map((account) => (
               <div key={account.id} className="p-2 border-b">
-                <p>{account.name} (@{account.username})</p>
+                <p>{account.nickName}</p>
               </div>
             ))
           ) : (
