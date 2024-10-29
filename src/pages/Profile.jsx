@@ -91,7 +91,7 @@ export default function EnhancedProfile() {
     const fetchCurrentUser = async () => {
         setIsLoading(true); // Set loading to true at the start
         try {
-            const response = await fetch(`http://localhost:5001/users/1`);
+            const response = await fetch(`http://localhost:5001/users/1 `);
 
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
