@@ -10,7 +10,7 @@ const Actions = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://insta-lvyt.onrender.com/posts');
+        const response = await fetch('https://insta-2-e60y.onrender.com/posts');
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }

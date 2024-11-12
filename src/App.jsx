@@ -15,6 +15,7 @@ import Problem from './pages/Problem';
 import Switching from './pages/Switching';
 
 import SearchPanel from './pages/Search';
+import Messenger from './pages/Messages';
 
 const App = () => {
   return (
@@ -38,7 +39,7 @@ const Main = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/search" element={<SearchPanel />} />
           <Route path="/explore" element={<Explore />} />
-          <Route path="/messages" element={<Messages />} />
+          <Route path="/messages" element={<Messenger />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/create" element={<Create />} />
           <Route path="/profile" element={<Profile />} />
