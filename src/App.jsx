@@ -9,7 +9,7 @@ import Create from './pages/Create';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Settings from './pages/Settings';
-import Actions from './pages/actions';
+import Actions from './pages/Actions';
 import Saved from './pages/saved';
 import Problem from './pages/Problem';
 import Switching from './pages/Switching';
