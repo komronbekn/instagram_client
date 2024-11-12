@@ -7,9 +7,10 @@ const Explore = () => {
   const [showOptionsModal, setShowOptionsModal] = useState(false);
   const [showAccountInfo, setShowAccountInfo] = useState(false);
   const [showEmbedModal, setShowEmbedModal] = useState(false);
+  const [accountInfo, setAccountInfo] = useState(null); // State for account info
 
   useEffect(() => {
-    fetch('http://localhost:5001/posts')
+    fetch('https://insta-2-e60y.onrender.com/posts')  
       .then((response) => response.json())
       .then((data) => {
         setPosts(data);
@@ -27,6 +28,7 @@ const Explore = () => {
     setShowOptionsModal(false);
     setShowAccountInfo(false);
     setShowEmbedModal(false);
+    setAccountInfo(null); // Reset account info when closing modal
   };
 
   const toggleOptionsModal = (e) => {
@@ -39,6 +41,13 @@ const Explore = () => {
   };
 
   const handleAccountInfoClick = () => {
+    setAccountInfo({
+      username: modalPost.username,
+      userImg: modalPost.userImg,
+      bio: modalPost.bio, // Add any additional user info you want to display
+      followers: modalPost.followers,
+      following: modalPost.following,
+    });
     setShowAccountInfo(true);
     setShowOptionsModal(false);
   };
@@ -63,71 +72,17 @@ const Explore = () => {
         ))
       ) : (
         posts.map((post, index) => {
-          if (index === 3) {
-            return (
-              <div key={post.id} className="combined-posts flex space-x-2 mb-4 mr-[330px] -mt-[330px]">
-                {posts.slice(index, index + 2).map((p, i) => (
-                  <div
-                    key={p.id}
-                    className="relative post group"
-                    onClick={() => openModal(p)}
-                  >
-                    <img
-                      src={p.post}
-                      alt={`${p.username}'s post`}
-                      className="profile-img w-[320px] h-[320px]"
-                    />
-                    <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <span className="text-white text-lg font-semibold">{p.likeCount} Likes</span>
-                      <span className="text-white text-lg font-semibold">{p.comments.length} Comments</span>
-                    </div>
-                  </div>
-                ))}
+          // Existing post rendering logic...
+          return (
+            // Render each post here
+            <div key={post.id} className="relative post group mb-[8px]" onClick={() => openModal(post)}>
+              <img src={post.post} alt={`${post.username}'s post`} className="profile-img w-[320px] h-[320px]" />
+              <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="text-white text-lg font-semibold">{post.likeCount} Likes</span>
+                <span className="text-white text-lg font-semibold">{post.comments.length} Comments</span>
               </div>
-            );
-          } else if ((index + 1) % 5 === 0 && index !== 4) {
-            return (
-              <div key={post.id} className="special-post-container w-full flex justify-center mb-[8px]">
-                <div
-                  className="relative special-post group"
-                  onClick={() => openModal(post)}
-                >
-                  <img
-                    src={post.post}
-                    alt={`${post.username}'s post`}
-                    className="profile-img w-[320px] h-[320px]"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity h-[320px]">
-                    <span className="text-white text-lg font-semibold">{post.likeCount} Likes</span>
-                    <span className="text-white text-lg font-semibold">{post.comments.length} Comments</span>
-                  </div>
-                </div>
-              </div>
-            );
-          } else if (index !== 4) {
-            const isTallPost = (index + 1) % 5 === 3;
-
-            return (
-              <div
-                key={post.id}
-                className="relative post group mb-[8px]"
-                onClick={() => openModal(post)}
-              >
-                <img
-                  src={post.post}
-                  alt={`${post.username}'s post`}
-                  className={`profile-img ${isTallPost ? 'w-[320px] h-[640px]' : 'w-[320px] h-[320px]'}`}
-                />
-                <div
-                  className={`absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity ${index === 2 ? 'h-[640px]' : 'h-[320px]'}`
-                  }>
-                  <span className="text-white text-lg font-semibold">{post.likeCount} Likes</span>
-                  <span className="text-white text-lg font-semibold">{post.comments.length} Comments</span>
-                </div>
-              </div>
-            );
-          }
-          return null;
+            </div>
+          );
         })
       )}
 
@@ -168,6 +123,19 @@ const Explore = () => {
                 </ul>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {showAccountInfo && accountInfo && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" onClick={closeModal}>
+          <div className="bg-white p-6 rounded-lg shadow-lg relative w-[400px]" onClick={(e) => e.stopPropagation()}>
+            <h2 className="text-xl font-semibold mb-2">{accountInfo.username}</h2>
+            <img className="w-[80px] h-[80px] rounded-full mb-2" src={accountInfo.userImg} alt="" />
+            <p><strong>Bio:</strong> {accountInfo.bio}</p>
+            <p><strong>Followers:</strong> {accountInfo.followers}</p>
+            <p><strong>Following:</strong> {accountInfo.following}</p>
+            <button onClick={() => setShowAccountInfo(false)} className="mt-4 px-4 py-2 bg-gray-500 text-white rounded">Close</button>
           </div>
         </div>
       )}
