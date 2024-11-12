@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  AiFillHome, 
-  AiOutlineSearch, 
-  AiOutlineCompass, 
-  AiOutlineMessage,   
-  AiOutlineHeart, 
-  AiOutlinePlusSquare, 
-  AiOutlineUser, 
-  AiOutlineEllipsis // "More" uchun ikonka
+import {
+  AiFillHome,
+  AiOutlineSearch,
+  AiOutlineCompass,
+  AiOutlineMessage,
+  AiOutlineHeart,
+  AiOutlinePlusSquare,
+  AiOutlineUser,
+  AiOutlineEllipsis
 } from 'react-icons/ai';
-import SearchPanel from "../pages/Search"; 
+import SearchPanel from "../pages/Search";
 
-
-
-const Sidebar = () => {
+const Sidebar = ({ toggleCreateModal }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -25,16 +24,14 @@ const Sidebar = () => {
     setIsOpen(false);
   };
 
-  const [isSearchOpen, setIsSearchOpen] = useState(false); // Управление состоянием панели поиска
-
   return (
     <div className="fixed w-64 h-screen p-4 bg-white shadow-lg flex flex-col">
-      {/* Логотип */}
+      {/* Logo */}
       <Link to="/home" className="text-3xl font-bold mb-8 text-black">
         Instagram
       </Link>
 
-      {/* Навигация */}
+      {/* Navigation */}
       <nav className="flex flex-col space-y-6 flex-grow">
         <Link to="/home" className="flex items-center space-x-4 text-lg text-black hover:text-blue-500 focus:text-blue-500">
           <AiFillHome size={24} />
@@ -64,10 +61,15 @@ const Sidebar = () => {
           <span>Notifications</span>
         </Link>
 
-        <Link to="/create" className="flex items-center space-x-4 text-lg text-black hover:text-blue-500">
+        <Link to={'create'}><button
+          onClick={toggleCreateModal}
+          className="flex items-center space-x-4 text-lg text-black hover:text-blue-500"
+        >
           <AiOutlinePlusSquare size={24} />
           <span>Create</span>
+        </button>
         </Link>
+
 
         <Link to="/profile" className="flex items-center space-x-4 text-lg text-black hover:text-blue-500">
           <AiOutlineUser size={24} />
@@ -75,7 +77,7 @@ const Sidebar = () => {
         </Link>
       </nav>
 
-      {/* Раздел "More" */}
+      {/* More Section */}
       <div className="mt-auto">
         <div className={`dropdown ${isOpen ? 'dropdown-open' : ''} dropdown-top`}>
           <div
@@ -107,7 +109,7 @@ const Sidebar = () => {
         </div>
       </div>
 
-      {/* Панель поиска */}
+      {/* Search Panel */}
       <SearchPanel isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </div>
   );

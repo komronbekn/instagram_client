@@ -6,4 +6,4 @@ const Switching = () => {
   )
 }
 
-export default Switching
+export default Switching;
